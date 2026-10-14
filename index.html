@@ -1,0 +1,224 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\geometry{left=1.2cm, right=1.2cm, top=0.5cm, bottom=1.0cm} % Marges verticales légèrement réduites
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{fontawesome5}
+\usepackage{tikz}
+\usepackage{etoolbox}
+\usepackage{tcolorbox}
+
+% ------ Palette de couleurs ------
+\definecolor{bandBg}{RGB}{30, 41, 59}        % Bleu ardoise très sombre (Bandeau)
+\definecolor{bandText}{RGB}{248, 250, 252}   % Blanc cassé
+\definecolor{accentColor}{RGB}{180, 148, 115}% Bronze / Taupe clair (Sous-titre & icônes)
+\definecolor{titleColor}{RGB}{30, 41, 59}    % Bleu ardoise (Titres)
+\definecolor{textColor}{RGB}{51, 65, 85}     % Gris anthracite (Texte principal)
+\definecolor{boxBg}{RGB}{241, 245, 249}      % Gris très clair (Fond des cadres à gauche)
+\definecolor{boxBorder}{RGB}{226, 232, 240}  % Bordure subtile des cadres
+% ---------------------------------
+
+\renewcommand{\familydefault}{\sfdefault}
+\color{textColor}
+
+% Style des boîtes de la colonne de gauche
+\newtcolorbox{sidebox}[2]{
+  colback=boxBg,
+  colframe=boxBorder,
+  boxrule=0.5pt,
+  arc=4pt,
+  left=8pt, right=8pt, top=8pt, bottom=8pt,
+  before skip=0pt, after skip=0.3cm, % Espacement après chaque boîte réduit
+  before upper={%
+    {\color{titleColor}\large\bfseries\makebox[1.5em][l]{\color{accentColor}#1}#2}\par
+    \vspace{0.2em}
+    {\color{accentColor}\hrule height 0.8pt}
+    \vspace{0.4em}
+  }
+}
+
+% Commande pour les titres de la colonne de droite
+\newcommand{\rightsection}[2]{%
+  \vspace{0.1cm}
+  {\color{titleColor}\Large\bfseries\makebox[1.6em][l]{\color{accentColor}#1}#2}\par
+  \vspace{0.15em}
+  {\color{accentColor}\hrule height 0.8pt}
+  \vspace{0.2cm}
+}
+
+% Commande pour les entrées (Formation / Expérience)
+\newcommand{\entry}[4]{%
+  \noindent\textbf{\color{titleColor}#1} \hfill {\footnotesize\color{accentColor}\textbf{#2}}\\[0.15em]
+  \ifstrempty{#3}{}{%
+    \textit{\small #3}\\[0.2em]
+  }%
+  {\small #4}
+  \vspace{0.25cm}\par % Espacement réduit entre les entrées
+}
+
+\begin{document}
+\pagestyle{empty}
+
+% ==========================================
+% BANDE SUPÉRIEURE (Nom, Titre, Profil + Photo)
+% ==========================================
+\begin{tikzpicture}[remember picture, overlay]
+  \fill[bandBg] (current page.north west) rectangle ([yshift=-4.3cm]current page.north east);
+\end{tikzpicture}
+
+\noindent
+\begin{minipage}[t]{0.75\textwidth}
+  \vspace{0.2cm} % Léger décalage vers le bas pour ne pas coller en haut
+  \color{bandText}
+  {\Huge \bfseries Thomas MOREAU}\\[0.25em]
+  {\large \bfseries \color{accentColor} Élève-Ingénieur Généraliste — Mécanique \& Conception}\\[0.6em]
+  {\small \linespread{1.1}\selectfont
+  Élève ingénieur en cursus généraliste à l’École Centrale de Lyon, issu d'une CPGE. Intéressé par la mécanique et les sciences de l’ingénieur, je suis sérieux, rigoureux et à l’aise dans le travail en équipe. Je développe mes compétences techniques à travers la réalisation de projets concrets et recherche un stage de césure de 6 mois en bureau d'études ou R\&D mécanique.}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.21\textwidth}
+  \vspace{0.1cm}
+  \centering
+  \IfFileExists{photo.jpg}{%
+    \begin{tikzpicture}
+      \clip (0,0) circle (1.5cm); % Photo légèrement réduite
+      \node at (0,0) {\includegraphics[width=3cm]{photo.jpg}};
+      \draw[accentColor, line width=1.5pt] (0,0) circle (1.5cm);
+    \end{tikzpicture}
+  }{%
+    \begin{tikzpicture}
+      \fill[boxBg] (0,0) circle (1.5cm);
+      \draw[accentColor, line width=1.5pt] (0,0) circle (1.5cm);
+      \node[align=center, text=titleColor, font=\footnotesize] at (0,0) {\faUser\\[0.3em]Photo\\(photo.jpg)};
+    \end{tikzpicture}
+  }
+\end{minipage}
+
+\vspace{1.2cm} % Espace entre la bande et les colonnes
+
+% ==========================================
+% CORPS DU CV : DEUX COLONNES SANS DÉMARCATION
+% ==========================================
+\noindent
+% --- COLONNE DE GAUCHE ---
+\begin{minipage}[t]{0.33\textwidth}
+
+  % 1. Contact
+  \begin{sidebox}{\faAddressCard}{Contact}
+    \small
+    \begin{itemize}[leftmargin=1.5em, labelsep=0.5em, itemsep=0.25em, topsep=0pt]
+      \item[\faPhone] +33 6 12 34 56 78
+      \item[\faEnvelope] \href{mailto:t.moreau@ecl.ec-lyon.fr}{t.moreau@ecl.ec-lyon.fr}
+      \item[\faMapMarker] 69130 Écully, France
+      \item[\faLinkedin] \href{https://linkedin.com}{/in/thomas-moreau}
+      \item[\faCar] Permis B (véhiculé)
+    \end{itemize}
+  \end{sidebox}
+
+  % 2. Compétences
+  \begin{sidebox}{\faCogs}{Compétences}
+    \small
+    \textbf{\color{titleColor}CAO \& Simulation}
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
+      \item SolidWorks, CATIA V5
+      \item ANSYS (calcul de structures, MEF)
+      \item Abaqus, Star-CCM+ (notions)
+    \end{itemize}
+    \vspace{0.3em}
+    \textbf{\color{titleColor}Programmation \& Calcul}
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
+      \item Python (NumPy, SciPy, Matplotlib)
+      \item MATLAB / Simulink
+      \item C++, SQL, Git, \LaTeX
+    \end{itemize}
+    \vspace{0.3em}
+    \textbf{\color{titleColor}Fabrication \& Essais}
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
+      \item Impression 3D (FDM, SLA)
+      \item Usinage conventionnel, découpe laser
+      \item Chaînes d'acquisition (LabVIEW, Arduino)
+    \end{itemize}
+  \end{sidebox}
+
+  % 3. Langues
+  \begin{sidebox}{\faGlobe}{Langues}
+    \small
+    \begin{itemize}[leftmargin=1.2em, itemsep=0.3em, topsep=0pt]
+      \item \textbf{Français :} Langue maternelle
+      \item \textbf{Anglais :} Niveau C1\\
+      {\footnotesize\textit{TOEIC : 945/990}}
+      \item \textbf{Allemand :} Niveau B2\\
+      {\footnotesize\textit{Séjour linguistique à Munich}}
+    \end{itemize}
+  \end{sidebox}
+
+  % 4. Projets personnels
+  \begin{sidebox}{\faWrench}{Projets persos}
+    \small
+    \textbf{\color{titleColor}Drone quadricoptère FPV}\\
+    Modélisation du châssis (SolidWorks), impression 3D, assemblage et réglage PID.\\[0.3em]
+    \textbf{\color{titleColor}Restauration mécanique}\\
+    Réfection d'un moteur 2 temps (métrologie, roulements, carburation).
+  \end{sidebox}
+
+\end{minipage}%
+\hfill
+% --- COLONNE DE DROITE ---
+\begin{minipage}[t]{0.63\textwidth}
+
+  % 1. Formation
+  \rightsection{\faGraduationCap}{Formation}
+
+  \entry{École Centrale de Lyon}{2024 -- 2027}{Diplôme d'Ingénieur Généraliste}{%
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
+      \item Mécanique des milieux continus, fluides, thermodynamique, RDM.
+      \item Conception mécanique assistée par ordinateur, vibrations, matériaux composites.
+    \end{itemize}
+  }
+
+  \entry{Lycée du Parc — Lyon}{2022 -- 2024}{Classes Préparatoires aux Grandes Écoles (PCSI / PSI*)}{%
+    Formation intensive en mathématiques, physique et sciences de l'ingénieur.
+  }
+
+  % 2. Expériences professionnelles
+  \rightsection{\faBriefcase}{Expériences professionnelles}
+
+  \entry{Stage Assistant Ingénieur — Bureau d'Études}{Mai -- Août 2026}{Safran Transmission Systems | Colombes (92)}{%
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
+      \item Pré-dimensionnement et modélisation (CATIA V5) d'un outillage de montage.
+      \item Calculs par éléments finis (ANSYS) pour validation de la tenue mécanique.
+      \item Mise en plan normalisée (cotation ISO/GPS) pour lancement en fabrication.
+    \end{itemize}
+  }
+
+  \entry{Stage Opérateur en Production Industrielle}{Juin -- Juil. 2025}{Renault Trucks (Groupe Volvo) | Vénissieux (69)}{%
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
+      \item Intégration sur ligne d'assemblage moteurs poids lourds (culasse/distribution).
+      \item Mise en place d'un standard visuel 5S et amélioration ergonomique d'un poste.
+    \end{itemize}
+  }
+
+  % 3. Projets académiques & Associatif
+  \rightsection{\faDraftingCompass}{Projets \& Responsabilités}
+
+  \entry{Écurie Piston Sport Auto (Formula Student)}{2024 -- Présent}{Membre du pôle Châssis \& Liaison au sol | Centrale Lyon}{%
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
+      \item Conception de porte-moyeux en aluminium pour une monoplace électrique.
+      \item Optimisation topologique pour réduire la masse non suspendue de 18\%.
+    \end{itemize}
+  }
+
+  \entry{Projet d'Étude — Éolienne Urbaine à Axe Vertical}{2024 -- 2025}{Équipe de 6 élèves-ingénieurs | Centrale Lyon}{%
+    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
+      \item Dimensionnement de l'arbre de transmission et sélection des roulements.
+      \item Prototypage de pales par impression 3D et essais aérodynamiques.
+    \end{itemize}
+  }
+
+\end{minipage}
+
+\end{document}
