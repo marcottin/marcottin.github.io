@@ -1,224 +1,313 @@
-\documentclass[a4paper,10pt]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[T1]{fontenc}
-\usepackage{geometry}
-\geometry{left=1.2cm, right=1.2cm, top=0.5cm, bottom=1.0cm} % Marges verticales légèrement réduites
-\usepackage{enumitem}
-\usepackage{xcolor}
-\usepackage[hidelinks]{hyperref}
-\usepackage{graphicx}
-\usepackage{fontawesome5}
-\usepackage{tikz}
-\usepackage{etoolbox}
-\usepackage{tcolorbox}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Ingénieur</title>
+  <style>
+    :root {
+      --bg-color: #ffffff;
+      --text-main: #37352f;
+      --text-muted: #787774;
+      --border-color: #e9e9e7;
+      --card-bg: #ffffff;
+      --card-hover: #f9f9f8;
+      --line-color: #e3e2e0;
+      --dot-color: #37352f;
+      
+      /* Couleurs des tags style Notion */
+      --tag-blue-bg: #e7f3f8; --tag-blue-text: #183347;
+      --tag-orange-bg: #faebdd; --tag-orange-text: #49290e;
+      --tag-green-bg: #edf3ec; --tag-green-text: #1c3829;
+      --tag-purple-bg: #f6f3f9; --tag-purple-text: #412454;
+      --tag-gray-bg: #f1f1ef; --tag-gray-text: #37352f;
+    }
 
-% ------ Palette de couleurs ------
-\definecolor{bandBg}{RGB}{30, 41, 59}        % Bleu ardoise très sombre (Bandeau)
-\definecolor{bandText}{RGB}{248, 250, 252}   % Blanc cassé
-\definecolor{accentColor}{RGB}{180, 148, 115}% Bronze / Taupe clair (Sous-titre & icônes)
-\definecolor{titleColor}{RGB}{30, 41, 59}    % Bleu ardoise (Titres)
-\definecolor{textColor}{RGB}{51, 65, 85}     % Gris anthracite (Texte principal)
-\definecolor{boxBg}{RGB}{241, 245, 249}      % Gris très clair (Fond des cadres à gauche)
-\definecolor{boxBorder}{RGB}{226, 232, 240}  % Bordure subtile des cadres
-% ---------------------------------
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-\renewcommand{\familydefault}{\sfdefault}
-\color{textColor}
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.5;
+      padding: 32px 20px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
 
-% Style des boîtes de la colonne de gauche
-\newtcolorbox{sidebox}[2]{
-  colback=boxBg,
-  colframe=boxBorder,
-  boxrule=0.5pt,
-  arc=4pt,
-  left=8pt, right=8pt, top=8pt, bottom=8pt,
-  before skip=0pt, after skip=0.3cm, % Espacement après chaque boîte réduit
-  before upper={%
-    {\color{titleColor}\large\bfseries\makebox[1.5em][l]{\color{accentColor}#1}#2}\par
-    \vspace{0.2em}
-    {\color{accentColor}\hrule height 0.8pt}
-    \vspace{0.4em}
-  }
-}
+    /* --- EN-TÊTE & INTRODUCTION --- */
+    .header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-color);
+    }
 
-% Commande pour les titres de la colonne de droite
-\newcommand{\rightsection}[2]{%
-  \vspace{0.1cm}
-  {\color{titleColor}\Large\bfseries\makebox[1.6em][l]{\color{accentColor}#1}#2}\par
-  \vspace{0.15em}
-  {\color{accentColor}\hrule height 0.8pt}
-  \vspace{0.2cm}
-}
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
 
-% Commande pour les entrées (Formation / Expérience)
-\newcommand{\entry}[4]{%
-  \noindent\textbf{\color{titleColor}#1} \hfill {\footnotesize\color{accentColor}\textbf{#2}}\\[0.15em]
-  \ifstrempty{#3}{}{%
-    \textit{\small #3}\\[0.2em]
-  }%
-  {\small #4}
-  \vspace{0.25cm}\par % Espacement réduit entre les entrées
-}
+    .intro-text {
+      font-size: 1rem;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
 
-\begin{document}
-\pagestyle{empty}
+    .quick-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
 
-% ==========================================
-% BANDE SUPÉRIEURE (Nom, Titre, Profil + Photo)
-% ==========================================
-\begin{tikzpicture}[remember picture, overlay]
-  \fill[bandBg] (current page.north west) rectangle ([yshift=-4.3cm]current page.north east);
-\end{tikzpicture}
+    .quick-links a {
+      text-decoration: none;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 4px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      transition: background 0.15s ease;
+    }
 
-\noindent
-\begin{minipage}[t]{0.75\textwidth}
-  \vspace{0.2cm} % Léger décalage vers le bas pour ne pas coller en haut
-  \color{bandText}
-  {\Huge \bfseries Thomas MOREAU}\\[0.25em]
-  {\large \bfseries \color{accentColor} Élève-Ingénieur Généraliste — Mécanique \& Conception}\\[0.6em]
-  {\small \linespread{1.1}\selectfont
-  Élève ingénieur en cursus généraliste à l’École Centrale de Lyon, issu d'une CPGE. Intéressé par la mécanique et les sciences de l’ingénieur, je suis sérieux, rigoureux et à l’aise dans le travail en équipe. Je développe mes compétences techniques à travers la réalisation de projets concrets et recherche un stage de césure de 6 mois en bureau d'études ou R\&D mécanique.}
-\end{minipage}%
-\hfill
-\begin{minipage}[t]{0.21\textwidth}
-  \vspace{0.1cm}
-  \centering
-  \IfFileExists{photo.jpg}{%
-    \begin{tikzpicture}
-      \clip (0,0) circle (1.5cm); % Photo légèrement réduite
-      \node at (0,0) {\includegraphics[width=3cm]{photo.jpg}};
-      \draw[accentColor, line width=1.5pt] (0,0) circle (1.5cm);
-    \end{tikzpicture}
-  }{%
-    \begin{tikzpicture}
-      \fill[boxBg] (0,0) circle (1.5cm);
-      \draw[accentColor, line width=1.5pt] (0,0) circle (1.5cm);
-      \node[align=center, text=titleColor, font=\footnotesize] at (0,0) {\faUser\\[0.3em]Photo\\(photo.jpg)};
-    \end{tikzpicture}
-  }
-\end{minipage}
+    .quick-links a:hover {
+      background-color: var(--tag-gray-bg);
+      color: var(--text-main);
+    }
 
-\vspace{1.2cm} % Espace entre la bande et les colonnes
+    /* --- FRISE CHRONOLOGIQUE --- */
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
 
-% ==========================================
-% CORPS DU CV : DEUX COLONNES SANS DÉMARCATION
-% ==========================================
-\noindent
-% --- COLONNE DE GAUCHE ---
-\begin{minipage}[t]{0.33\textwidth}
+    /* Ligne verticale */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 0;
+      width: 2px;
+      background-color: var(--line-color);
+    }
 
-  % 1. Contact
-  \begin{sidebox}{\faAddressCard}{Contact}
-    \small
-    \begin{itemize}[leftmargin=1.5em, labelsep=0.5em, itemsep=0.25em, topsep=0pt]
-      \item[\faPhone] +33 6 12 34 56 78
-      \item[\faEnvelope] \href{mailto:t.moreau@ecl.ec-lyon.fr}{t.moreau@ecl.ec-lyon.fr}
-      \item[\faMapMarker] 69130 Écully, France
-      \item[\faLinkedin] \href{https://linkedin.com}{/in/thomas-moreau}
-      \item[\faCar] Permis B (véhiculé)
-    \end{itemize}
-  \end{sidebox}
+    .timeline-item {
+      position: relative;
+      margin-bottom: 36px;
+    }
 
-  % 2. Compétences
-  \begin{sidebox}{\faCogs}{Compétences}
-    \small
-    \textbf{\color{titleColor}CAO \& Simulation}
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
-      \item SolidWorks, CATIA V5
-      \item ANSYS (calcul de structures, MEF)
-      \item Abaqus, Star-CCM+ (notions)
-    \end{itemize}
-    \vspace{0.3em}
-    \textbf{\color{titleColor}Programmation \& Calcul}
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
-      \item Python (NumPy, SciPy, Matplotlib)
-      \item MATLAB / Simulink
-      \item C++, SQL, Git, \LaTeX
-    \end{itemize}
-    \vspace{0.3em}
-    \textbf{\color{titleColor}Fabrication \& Essais}
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=2pt]
-      \item Impression 3D (FDM, SLA)
-      \item Usinage conventionnel, découpe laser
-      \item Chaînes d'acquisition (LabVIEW, Arduino)
-    \end{itemize}
-  \end{sidebox}
+    .timeline-item:last-child {
+      margin-bottom: 0;
+    }
 
-  % 3. Langues
-  \begin{sidebox}{\faGlobe}{Langues}
-    \small
-    \begin{itemize}[leftmargin=1.2em, itemsep=0.3em, topsep=0pt]
-      \item \textbf{Français :} Langue maternelle
-      \item \textbf{Anglais :} Niveau C1\\
-      {\footnotesize\textit{TOEIC : 945/990}}
-      \item \textbf{Allemand :} Niveau B2\\
-      {\footnotesize\textit{Séjour linguistique à Munich}}
-    \end{itemize}
-  \end{sidebox}
+    /* Point sur la frise */
+    .timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 6px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background-color: var(--bg-color);
+      border: 3px solid var(--dot-color);
+      z-index: 1;
+    }
 
-  % 4. Projets personnels
-  \begin{sidebox}{\faWrench}{Projets persos}
-    \small
-    \textbf{\color{titleColor}Drone quadricoptère FPV}\\
-    Modélisation du châssis (SolidWorks), impression 3D, assemblage et réglage PID.\\[0.3em]
-    \textbf{\color{titleColor}Restauration mécanique}\\
-    Réfection d'un moteur 2 temps (métrologie, roulements, carburation).
-  \end{sidebox}
+    /* Date au-dessus de la carte */
+    .timeline-date {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
 
-\end{minipage}%
-\hfill
-% --- COLONNE DE DROITE ---
-\begin{minipage}[t]{0.63\textwidth}
+    /* --- CARTE STYLE NOTION MOSAÏQUE --- */
+    .notion-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(15, 15, 15, 0.04);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    }
 
-  % 1. Formation
-  \rightsection{\faGraduationCap}{Formation}
+    .notion-card:hover {
+      background-color: var(--card-hover);
+      box-shadow: 0 6px 16px rgba(15, 15, 15, 0.08);
+      transform: translateY(-2px);
+    }
 
-  \entry{École Centrale de Lyon}{2024 -- 2027}{Diplôme d'Ingénieur Généraliste}{%
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
-      \item Mécanique des milieux continus, fluides, thermodynamique, RDM.
-      \item Conception mécanique assistée par ordinateur, vibrations, matériaux composites.
-    \end{itemize}
-  }
+    .card-cover {
+      width: 100%;
+      height: 170px;
+      object-fit: cover;
+      border-bottom: 1px solid var(--border-color);
+      background-color: #f7f6f3;
+      display: block;
+    }
 
-  \entry{Lycée du Parc — Lyon}{2022 -- 2024}{Classes Préparatoires aux Grandes Écoles (PCSI / PSI*)}{%
-    Formation intensive en mathématiques, physique et sciences de l'ingénieur.
-  }
+    .card-body {
+      padding: 14px 16px 16px;
+    }
 
-  % 2. Expériences professionnelles
-  \rightsection{\faBriefcase}{Expériences professionnelles}
+    .card-title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
 
-  \entry{Stage Assistant Ingénieur — Bureau d'Études}{Mai -- Août 2026}{Safran Transmission Systems | Colombes (92)}{%
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
-      \item Pré-dimensionnement et modélisation (CATIA V5) d'un outillage de montage.
-      \item Calculs par éléments finis (ANSYS) pour validation de la tenue mécanique.
-      \item Mise en plan normalisée (cotation ISO/GPS) pour lancement en fabrication.
-    \end{itemize}
-  }
+    .card-icon {
+      font-size: 1.15rem;
+    }
 
-  \entry{Stage Opérateur en Production Industrielle}{Juin -- Juil. 2025}{Renault Trucks (Groupe Volvo) | Vénissieux (69)}{%
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
-      \item Intégration sur ligne d'assemblage moteurs poids lourds (culasse/distribution).
-      \item Mise en place d'un standard visuel 5S et amélioration ergonomique d'un poste.
-    \end{itemize}
-  }
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-main);
+    }
 
-  % 3. Projets académiques & Associatif
-  \rightsection{\faDraftingCompass}{Projets \& Responsabilités}
+    .card-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
 
-  \entry{Écurie Piston Sport Auto (Formula Student)}{2024 -- Présent}{Membre du pôle Châssis \& Liaison au sol | Centrale Lyon}{%
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
-      \item Conception de porte-moyeux en aluminium pour une monoplace électrique.
-      \item Optimisation topologique pour réduire la masse non suspendue de 18\%.
-    \end{itemize}
-  }
+    /* --- PROPRIÉTÉS / TAGS NOTION --- */
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
 
-  \entry{Projet d'Étude — Éolienne Urbaine à Axe Vertical}{2024 -- 2025}{Équipe de 6 élèves-ingénieurs | Centrale Lyon}{%
-    \begin{itemize}[leftmargin=1.2em, noitemsep, topsep=0pt]
-      \item Dimensionnement de l'arbre de transmission et sélection des roulements.
-      \item Prototypage de pales par impression 3D et essais aérodynamiques.
-    \end{itemize}
-  }
+    .tag {
+      font-size: 0.78rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-weight: 500;
+    }
 
-\end{minipage}
+    .tag-blue { background-color: var(--tag-blue-bg); color: var(--tag-blue-text); }
+    .tag-orange { background-color: var(--tag-orange-bg); color: var(--tag-orange-text); }
+    .tag-green { background-color: var(--tag-green-bg); color: var(--tag-green-text); }
+    .tag-purple { background-color: var(--tag-purple-bg); color: var(--tag-purple-text); }
+    .tag-gray { background-color: var(--tag-gray-bg); color: var(--tag-gray-text); }
 
-\end{document}
+    /* Adaptation petits écrans */
+    @media (max-width: 480px) {
+      body { padding: 20px 16px; }
+      .header h1 { font-size: 1.6rem; }
+      .card-cover { height: 140px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SECTION SUPÉRIEURE : INTRODUCTION -->
+  <header class="header">
+    <h1>Prénom Nom — Ingénieur Généraliste</h1>
+    <p class="intro-text">
+      Curieux par nature, j'aime démonter des problèmes complexes pour concevoir des solutions concrètes — qu'il s'agisse de systèmes physiques, d'optimisation de processus ou d'algorithmie. Voici une sélection chronologique de mes projets techniques et personnels.
+    </p>
+    <div class="quick-links">
+      <a href="mailto:ton.email@exemple.fr">✉️ Contact</a>
+      <a href="https://linkedin.com" target="_blank" rel="noopener">🔗 LinkedIn</a>
+      <a href="https://github.com" target="_blank" rel="noopener">💻 GitHub</a>
+      <a href="LIEN_VERS_CV_PDF" target="_blank" rel="noopener">📄 CV (PDF)</a>
+    </div>
+  </header>
+
+  <!-- SECTION INFÉRIEURE : FRISE CHRONOLOGIQUE DES PROJETS -->
+  <main class="timeline">
+
+    <!-- PROJET 1 (Le plus récent) -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Octobre 2026</div>
+      <!-- Remplace le href par l'URL publique de ta sous-page Notion -->
+      <a href="https://ton-espace.notion.site/Lien-vers-ta-page-Puissance-4" target="_blank" rel="noopener" class="notion-card">
+        <!-- Remplace le src par le lien ou le chemin de ton image de couverture -->
+        <img src="https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=800&q=80" alt="Aperçu Puissance 4" class="card-cover">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-icon">🕹️</span>
+            <h2 class="card-title">Puissance 4 vs IA : Décoder la logique des jeux</h2>
+          </div>
+          <p class="card-desc">
+            Conception de A à Z d'une interface graphique et d'une IA décisionnelle basée sur l'algorithme Minimax et l'élagage Alpha-Beta.
+          </p>
+          <div class="card-tags">
+            <span class="tag tag-blue">Python</span>
+            <span class="tag tag-purple">Algorithmie</span>
+            <span class="tag tag-orange">Tkinter</span>
+            <span class="tag tag-gray">Projet Personnel</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- PROJET 2 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Juin 2026</div>
+      <a href="https://ton-espace.notion.site/Lien-vers-projet-2" target="_blank" rel="noopener" class="notion-card">
+        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Aperçu Projet Ingénierie" class="card-cover">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-icon">⚙️</span>
+            <h2 class="card-title">Nom de ton deuxième projet ingénieur</h2>
+          </div>
+          <p class="card-desc">
+            Courte phrase résumant le problème technique résolu et le résultat chiffré obtenu.
+          </p>
+          <div class="card-tags">
+            <span class="tag tag-green">Conception / CAO</span>
+            <span class="tag tag-orange">Simulation</span>
+            <span class="tag tag-gray">Projet Académique</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- PROJET 3 -->
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">Janvier 2026</div>
+      <a href="https://ton-espace.notion.site/Lien-vers-projet-3" target="_blank" rel="noopener" class="notion-card">
+        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Aperçu Projet Data/Analyse" class="card-cover">
+        <div class="card-body">
+          <div class="card-title-row">
+            <span class="card-icon">📊</span>
+            <h2 class="card-title">Nom de ton troisième projet</h2>
+          </div>
+          <p class="card-desc">
+            Optimisation et modélisation d'un système complexe. Automatisation du traitement des données d'essais.
+          </p>
+          <div class="card-tags">
+            <span class="tag tag-blue">Modélisation</span>
+            <span class="tag tag-purple">Optimisation</span>
+            <span class="tag tag-gray">Stage</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+  </main>
+
+</body>
+</html>
