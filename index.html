@@ -12,7 +12,7 @@
     --encre:  #0e1116;
     --doux:   #5b6270;
     --filet:  #d3d7de;
-    --accent: #2438c8;
+    --accent: #2b6e55;
 
     --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
     --sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -224,6 +224,7 @@
   .ap-corps { padding: clamp(1.5rem, 4vw, 2.75rem); }
   .ap-meta {
     margin: 0;
+	text-align: center;			   
     font-family: var(--mono);
     font-size: .75rem;
     letter-spacing: .1em;
@@ -232,6 +233,7 @@
   }
   .apercu h2 {
     margin: .5rem 0 1.25rem;
+	text-align: center;
     font-family: var(--serif);
     font-weight: 400;
     font-size: clamp(1.9rem, 4vw, 2.6rem);
@@ -241,23 +243,33 @@
   .ap-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: .4rem;
-    margin: 0 0 1.9rem;
+	justify-content: center;
+    gap: .45rem;
+    margin: 0 0 2rem;
     padding: 0;
     list-style: none;
   }
   .ap-tags li {
-    padding: .28rem .6rem;
-    border: 1px solid rgba(36, 56, 200, .35);
-    color: var(--accent);
+    padding: .3rem .8rem;
+    border-radius: 999px;
+    background: #dcebe3;
+    color: #1f5a42;
     font-family: var(--mono);
     font-size: .72rem;
     line-height: 1.3;
     letter-spacing: .02em;
   }
+  .ap-tags li:nth-child(6n+2) { background: #f1e6cf; color: #7a5a14; }
+  .ap-tags li:nth-child(6n+3) { background: #f0dcd3; color: #8a4326; }
+  .ap-tags li:nth-child(6n+4) { background: #dbe5ec; color: #2f5470; }
+  .ap-tags li:nth-child(6n+5) { background: #e6dcea; color: #5e3f6e; }
+  .ap-tags li:nth-child(6n)   { background: #e4e8d3; color: #55621f; }
   .ap-texte p {
     max-width: 62ch;
-    margin: 0 0 1rem;
+    margin: 0 auto 1rem;
+	  text-align: justify;
+    text-align-last: left;
+    hyphens: auto;
     color: #2a2f3a;
     line-height: 1.7;
   }
@@ -387,10 +399,6 @@
                   :           { day: 'numeric', month: 'long', year: 'numeric' };
     return new Intl.DateTimeFormat('fr-FR', { ...options, timeZone: 'UTC' }).format(horodate(s));
   };
-  const periode = (p) => {
-    if (!p.date) return '';
-    return p.fin ? `${formater(p.date)} – ${formater(p.fin)}` : formater(p.date);
-  };
 
   /* ───────── Apparition au défilement ───────── */
   const observateur = 'IntersectionObserver' in window
@@ -466,7 +474,7 @@
 
   function remplir(p) {
     ap.titre.textContent = p.titre;
-    ap.meta.textContent  = [periode(p), p.contexte].filter(Boolean).join('  ·  ');
+    ap.meta.textContent  = [p.date && formater(p.date), p.contexte].filter(Boolean).join('  ·  ');
     ap.meta.hidden       = !ap.meta.textContent;
 
     const tags = p.tags || [];
