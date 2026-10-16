@@ -1,313 +1,524 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Portfolio Ingénieur</title>
-  <style>
-    :root {
-      --bg-color: #ffffff;
-      --text-main: #37352f;
-      --text-muted: #787774;
-      --border-color: #e9e9e7;
-      --card-bg: #ffffff;
-      --card-hover: #f9f9f8;
-      --line-color: #e3e2e0;
-      --dot-color: #37352f;
-      
-      /* Couleurs des tags style Notion */
-      --tag-blue-bg: #e7f3f8; --tag-blue-text: #183347;
-      --tag-orange-bg: #faebdd; --tag-orange-text: #49290e;
-      --tag-green-bg: #edf3ec; --tag-green-text: #1c3829;
-      --tag-purple-bg: #f6f3f9; --tag-purple-text: #412454;
-      --tag-gray-bg: #f1f1ef; --tag-gray-text: #37352f;
-    }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<meta name="description" content="Portfolio de Marceau COTTIN, étudiant ingénieur interessé par la mécatronique et les énergies.">
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+  :root {
+    --fond:   #fbfbfc;
+    --encre:  #0e1116;
+    --doux:   #5b6270;
+    --filet:  #d3d7de;
+    --accent: #2438c8;
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif;
-      background-color: var(--bg-color);
-      color: var(--text-main);
-      line-height: 1.5;
-      padding: 32px 20px;
-      max-width: 720px;
-      margin: 0 auto;
-    }
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans:  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --mono:  ui-monospace, "SF Mono", "Cascadia Mono", "Roboto Mono", Menlo, Consolas, monospace;
 
-    /* --- EN-TÊTE & INTRODUCTION --- */
-    .header {
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 1px solid var(--border-color);
-    }
+    --gouttiere: 3rem;   /* distance entre l'axe et les cartes */
+    --respiration: 2.25rem;
+  }
 
-    .header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 12px;
-    }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
 
-    .intro-text {
-      font-size: 1rem;
-      color: var(--text-main);
-      margin-bottom: 16px;
-    }
+  html { scrollbar-gutter: stable; -webkit-text-size-adjust: 100%; }
+  html.fige { overflow: hidden; }
 
-    .quick-links {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
+  body {
+    margin: 0;
+    background: var(--fond);
+    color: var(--encre);
+    font-family: var(--sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
 
-    .quick-links a {
-      text-decoration: none;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding: 4px 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 4px;
-      transition: background 0.15s ease;
-    }
+  /* ───────── En-tête ───────── */
+  .entete {
+    padding: clamp(4rem, 14vh, 9rem) 1.5rem 0;
+    text-align: center;
+  }
+  .entete h1 {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(2.6rem, 7vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+  }
+  .entete p {
+    max-width: 33rem;
+    margin: 1.5rem auto 0;
+    color: var(--doux);
+    font-size: 1.0625rem;
+  }
 
-    .quick-links a:hover {
-      background-color: var(--tag-gray-bg);
-      color: var(--text-main);
-    }
+  /* ───────── Frise ───────── */
+  .frise {
+    position: relative;
+    max-width: 1040px;
+    margin: clamp(3rem, 8vh, 5rem) auto 0;
+    padding: 0 1.5rem clamp(5rem, 14vh, 9rem);
+    list-style: none;
+  }
+  .frise::before {            /* l'axe */
+    content: "";
+    position: absolute;
+    top: 0; bottom: 0; left: 50%;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--filet) 4rem, var(--filet) calc(100% - 6rem), transparent);
+    transform: translateX(-50%);
+  }
 
-    /* --- FRISE CHRONOLOGIQUE --- */
-    .timeline {
-      position: relative;
-      padding-left: 28px;
-    }
+  .projet {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: var(--respiration) 0;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1);
+  }
+  .projet.vu { opacity: 1; transform: none; }
 
-    /* Ligne verticale */
-    .timeline::before {
-      content: "";
-      position: absolute;
-      left: 7px;
-      top: 8px;
-      bottom: 0;
-      width: 2px;
-      background-color: var(--line-color);
-    }
+  .projet::before {           /* le nœud sur l'axe */
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: calc(var(--respiration) + .625rem - 5.5px);
+    width: 11px; height: 11px;
+    border: 1.5px solid var(--accent);
+    border-radius: 50%;
+    background: var(--fond);
+    transform: translateX(-50%);
+    transition: background .25s;
+    z-index: 1;
+  }
+  .projet::after {            /* le petit trait vers la carte */
+    content: "";
+    position: absolute;
+    top: calc(var(--respiration) + .625rem);
+    width: var(--gouttiere);
+    height: 1px;
+    background: var(--filet);
+    transition: background .25s;
+  }
+  .projet:nth-child(odd)::after  { right: 50%; }
+  .projet:nth-child(even)::after { left: 50%; }
+  .projet:has(.carte:hover)::before { background: var(--accent); }
+  .projet:has(.carte:hover)::after  { background: var(--accent); }
 
-    .timeline-item {
-      position: relative;
-      margin-bottom: 36px;
-    }
+  .date {
+    align-self: start;
+    padding-top: .1rem;
+    font-family: var(--mono);
+    font-size: .75rem;
+    line-height: 1.4;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--doux);
+    font-variant-numeric: tabular-nums;
+  }
 
-    .timeline-item:last-child {
-      margin-bottom: 0;
-    }
+  .carte {
+    appearance: none;
+    justify-self: stretch;
+    align-self: start;
+    display: block;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .carte:focus-visible { outline: 2px solid var(--accent); outline-offset: 6px; }
 
-    /* Point sur la frise */
-    .timeline-dot {
-      position: absolute;
-      left: -28px;
-      top: 6px;
-      width: 16px;
-      height: 16px;
-      border-radius: 50%;
-      background-color: var(--bg-color);
-      border: 3px solid var(--dot-color);
-      z-index: 1;
-    }
+  .vignette {
+    display: block;
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: #e7e9ee;
+    border: 1px solid var(--filet);
+  }
+  .vignette img {
+    display: block;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transition: transform .9s cubic-bezier(.2, .7, .2, 1);
+  }
+  .carte:hover .vignette img { transform: scale(1.035); }
 
-    /* Date au-dessus de la carte */
-    .timeline-date {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      margin-bottom: 8px;
-    }
+  .titre {
+    display: block;
+    margin-top: 1rem;
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2.2vw, 1.6rem);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    transition: color .2s;
+  }
+  .carte:hover .titre { color: var(--accent); }
 
-    /* --- CARTE STYLE NOTION MOSAÏQUE --- */
-    .notion-card {
-      display: block;
-      text-decoration: none;
-      color: inherit;
-      background-color: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 10px;
-      overflow: hidden;
-      box-shadow: 0 2px 6px rgba(15, 15, 15, 0.04);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
-    }
+  /* alternance gauche / droite */
+  .projet:nth-child(odd) .carte  { grid-column: 1; grid-row: 1; margin-right: var(--gouttiere); }
+  .projet:nth-child(odd) .date   { grid-column: 2; grid-row: 1; margin-left:  var(--gouttiere); text-align: left; }
+  .projet:nth-child(even) .carte { grid-column: 2; grid-row: 1; margin-left:  var(--gouttiere); }
+  .projet:nth-child(even) .date  { grid-column: 1; grid-row: 1; margin-right: var(--gouttiere); text-align: right; }
 
-    .notion-card:hover {
-      background-color: var(--card-hover);
-      box-shadow: 0 6px 16px rgba(15, 15, 15, 0.08);
-      transform: translateY(-2px);
-    }
+  .vide {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--doux);
+    font-size: .95rem;
+  }
 
-    .card-cover {
-      width: 100%;
-      height: 170px;
-      object-fit: cover;
-      border-bottom: 1px solid var(--border-color);
-      background-color: #f7f6f3;
-      display: block;
-    }
+  /* ───────── Aperçu détaillé ───────── */
+  .apercu {
+    width: min(780px, calc(100vw - 2rem));
+    max-height: min(88vh, 920px);
+    padding: 0;
+    border: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: var(--fond);
+    color: var(--encre);
+    box-shadow: 0 40px 90px -30px rgba(14, 17, 22, .45);
+  }
+  .apercu:focus { outline: none; }
+  .apercu[open] { animation: entree .35s cubic-bezier(.2, .7, .2, 1); }
+  .apercu::backdrop { background: rgba(14, 17, 22, .62); animation: fondu .35s ease; }
+  @keyframes entree { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes fondu  { from { opacity: 0; } to { opacity: 1; } }
 
-    .card-body {
-      padding: 14px 16px 16px;
-    }
+  .fermer {
+    position: sticky;
+    top: .75rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 2.25rem; height: 2.25rem;
+    margin: .75rem .75rem -3rem auto;
+    padding: 0;
+    border: 1px solid var(--filet);
+    background: var(--fond);
+    color: var(--encre);
+    cursor: pointer;
+    transition: color .2s, border-color .2s;
+  }
+  .fermer:hover { color: var(--accent); border-color: var(--accent); }
+  .fermer:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-    .card-title-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 6px;
-    }
+  .ap-visuel {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    background: #e7e9ee;
+  }
+  .ap-visuel img { display: block; width: 100%; height: 100%; object-fit: cover; }
 
-    .card-icon {
-      font-size: 1.15rem;
-    }
+  .ap-corps { padding: clamp(1.5rem, 4vw, 2.75rem); }
+  .ap-meta {
+    margin: 0;
+    font-family: var(--mono);
+    font-size: .75rem;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--doux);
+  }
+  .apercu h2 {
+    margin: .5rem 0 1.25rem;
+    font-family: var(--serif);
+    font-weight: 400;
+    font-size: clamp(1.9rem, 4vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+  }
+  .ap-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+    margin: 0 0 1.9rem;
+    padding: 0;
+    list-style: none;
+  }
+  .ap-tags li {
+    padding: .28rem .6rem;
+    border: 1px solid rgba(36, 56, 200, .35);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: .72rem;
+    line-height: 1.3;
+    letter-spacing: .02em;
+  }
+  .ap-texte p {
+    max-width: 62ch;
+    margin: 0 0 1rem;
+    color: #2a2f3a;
+    line-height: 1.7;
+  }
+  .ap-texte p:last-child { margin-bottom: 0; }
 
-    .card-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text-main);
-    }
+  .ap-figure {
+    margin: 2rem 0;
+    text-align: center;
+  }
+  .ap-figure img {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    background: #e7e9ee;
+  }
+  .ap-figure figcaption {
+    max-width: 52ch;
+    margin: .8rem auto 0;
+    color: var(--doux);
+    font-size: .875rem;
+    font-style: italic;
+    line-height: 1.5;
+  }
 
-    .card-desc {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
+  /* ───────── Petits écrans ───────── */
+  @media (max-width: 780px) {
+    :root { --gouttiere: 1.5rem; }
+    .frise { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .frise::before { left: calc(1.25rem + 5px); }
 
-    /* --- PROPRIÉTÉS / TAGS NOTION --- */
-    .card-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .projet { display: block; padding-left: 2.25rem; }
+    .projet::before { left: 5px; }
+    .projet:nth-child(odd)::after,
+    .projet:nth-child(even)::after { left: 5px; right: auto; width: 1.5rem; }
 
-    .tag {
-      font-size: 0.78rem;
-      padding: 2px 8px;
-      border-radius: 4px;
-      font-weight: 500;
-    }
+    .projet .date,
+    .projet:nth-child(odd) .date,
+    .projet:nth-child(even) .date { margin: 0 0 .75rem; text-align: left; }
+    .projet .carte,
+    .projet:nth-child(odd) .carte,
+    .projet:nth-child(even) .carte { margin: 0; }
+  }
 
-    .tag-blue { background-color: var(--tag-blue-bg); color: var(--tag-blue-text); }
-    .tag-orange { background-color: var(--tag-orange-bg); color: var(--tag-orange-text); }
-    .tag-green { background-color: var(--tag-green-bg); color: var(--tag-green-text); }
-    .tag-purple { background-color: var(--tag-purple-bg); color: var(--tag-purple-text); }
-    .tag-gray { background-color: var(--tag-gray-bg); color: var(--tag-gray-text); }
-
-    /* Adaptation petits écrans */
-    @media (max-width: 480px) {
-      body { padding: 20px 16px; }
-      .header h1 { font-size: 1.6rem; }
-      .card-cover { height: 140px; }
-    }
-  </style>
+  @media (prefers-reduced-motion: reduce) {
+    .projet { opacity: 1; transform: none; transition: none; }
+    .vignette img, .titre { transition: none; }
+    .apercu[open], .apercu::backdrop { animation: none; }
+  }
+</style>
 </head>
+
 <body>
 
-  <!-- SECTION SUPÉRIEURE : INTRODUCTION -->
-  <header class="header">
-    <h1>Prénom Nom — Ingénieur Généraliste</h1>
-    <p class="intro-text">
-      Curieux par nature, j'aime démonter des problèmes complexes pour concevoir des solutions concrètes — qu'il s'agisse de systèmes physiques, d'optimisation de processus ou d'algorithmie. Voici une sélection chronologique de mes projets techniques et personnels.
-    </p>
-    <div class="quick-links">
-      <a href="mailto:ton.email@exemple.fr">✉️ Contact</a>
-      <a href="https://linkedin.com" target="_blank" rel="noopener">🔗 LinkedIn</a>
-      <a href="https://github.com" target="_blank" rel="noopener">💻 GitHub</a>
-      <a href="LIEN_VERS_CV_PDF" target="_blank" rel="noopener">📄 CV (PDF)</a>
-    </div>
-  </header>
+<!-- EN-TÊTE -->
+<header class="entete">
+  <h1>Marceau COTTIN</h1>
+  <p>Étudiant ingénieur passionné par la mécatronique et les énergies. J'aime concevoir et prototyper des systèmes où mécanique, électronique et logiciel travaillent ensemble.</p>
+</header>
 
-  <!-- SECTION INFÉRIEURE : FRISE CHRONOLOGIQUE DES PROJETS -->
-  <main class="timeline">
+<main>
+  <ol class="frise" id="frise" aria-label="Projets"></ol>
+</main>
 
-    <!-- PROJET 1 (Le plus récent) -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">Octobre 2026</div>
-      <!-- Remplace le href par l'URL publique de ta sous-page Notion -->
-      <a href="https://ton-espace.notion.site/Lien-vers-ta-page-Puissance-4" target="_blank" rel="noopener" class="notion-card">
-        <!-- Remplace le src par le lien ou le chemin de ton image de couverture -->
-        <img src="https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&w=800&q=80" alt="Aperçu Puissance 4" class="card-cover">
-        <div class="card-body">
-          <div class="card-title-row">
-            <span class="card-icon">🕹️</span>
-            <h2 class="card-title">Puissance 4 vs IA : Décoder la logique des jeux</h2>
-          </div>
-          <p class="card-desc">
-            Conception de A à Z d'une interface graphique et d'une IA décisionnelle basée sur l'algorithme Minimax et l'élagage Alpha-Beta.
-          </p>
-          <div class="card-tags">
-            <span class="tag tag-blue">Python</span>
-            <span class="tag tag-purple">Algorithmie</span>
-            <span class="tag tag-orange">Tkinter</span>
-            <span class="tag tag-gray">Projet Personnel</span>
-          </div>
-        </div>
-      </a>
-    </div>
+<dialog class="apercu" id="apercu" aria-labelledby="ap-titre" tabindex="-1">
+  <button class="fermer" type="button" aria-label="Fermer">
+    <svg viewBox="0 0 12 12" width="12" height="12" aria-hidden="true"><path d="M1 1l10 10M11 1L1 11" fill="none" stroke="currentColor" stroke-width="1.25"/></svg>
+  </button>
+  <div class="ap-visuel"><img alt=""></div>
+  <div class="ap-corps">
+    <p class="ap-meta"></p>
+    <h2 id="ap-titre"></h2>
+    <ul class="ap-tags"></ul>
+    <div class="ap-texte"></div>
+  </div>
+</dialog>
 
-    <!-- PROJET 2 -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">Juin 2026</div>
-      <a href="https://ton-espace.notion.site/Lien-vers-projet-2" target="_blank" rel="noopener" class="notion-card">
-        <img src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=800&q=80" alt="Aperçu Projet Ingénierie" class="card-cover">
-        <div class="card-body">
-          <div class="card-title-row">
-            <span class="card-icon">⚙️</span>
-            <h2 class="card-title">Nom de ton deuxième projet ingénieur</h2>
-          </div>
-          <p class="card-desc">
-            Courte phrase résumant le problème technique résolu et le résultat chiffré obtenu.
-          </p>
-          <div class="card-tags">
-            <span class="tag tag-green">Conception / CAO</span>
-            <span class="tag tag-orange">Simulation</span>
-            <span class="tag tag-gray">Projet Académique</span>
-          </div>
-        </div>
-      </a>
-    </div>
+<script>
+(() => {
+  'use strict';
 
-    <!-- PROJET 3 -->
-    <div class="timeline-item">
-      <div class="timeline-dot"></div>
-      <div class="timeline-date">Janvier 2026</div>
-      <a href="https://ton-espace.notion.site/Lien-vers-projet-3" target="_blank" rel="noopener" class="notion-card">
-        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80" alt="Aperçu Projet Data/Analyse" class="card-cover">
-        <div class="card-body">
-          <div class="card-title-row">
-            <span class="card-icon">📊</span>
-            <h2 class="card-title">Nom de ton troisième projet</h2>
-          </div>
-          <p class="card-desc">
-            Optimisation et modélisation d'un système complexe. Automatisation du traitement des données d'essais.
-          </p>
-          <div class="card-tags">
-            <span class="tag tag-blue">Modélisation</span>
-            <span class="tag tag-purple">Optimisation</span>
-            <span class="tag tag-gray">Stage</span>
-          </div>
-        </div>
-      </a>
-    </div>
+  /* ───────── Réglages ───────── */
+  const RECENT_EN_PREMIER = true;   // false : du plus ancien au plus récent
+  const NB_MAX_PROJETS    = 99;
 
-  </main>
+  /* ───────── Collecte des projets ─────────
+     Chaque fichier projects/projet-NN.js appelle ajouterProjet({...}).
+     Le chargement s'arrête au premier numéro manquant. */
+  const projets = [];
+  window.ajouterProjet = (p) => { projets.push(p); };
 
+  const frise  = document.getElementById('frise');
+  const apercu = document.getElementById('apercu');
+  const ap = {
+    visuel: apercu.querySelector('.ap-visuel'),
+    image:  apercu.querySelector('.ap-visuel img'),
+    meta:   apercu.querySelector('.ap-meta'),
+    titre:  apercu.querySelector('h2'),
+    tags:   apercu.querySelector('.ap-tags'),
+    texte:  apercu.querySelector('.ap-texte'),
+  };
+
+  let liste = [];
+  let boutons = [];
+  let courant = -1;
+
+  /* ───────── Utilitaires ───────── */
+  const el = (tag, classe, texte) => {
+    const n = document.createElement(tag);
+    if (classe) n.className = classe;
+    if (texte) n.textContent = texte;
+    return n;
+  };
+
+  const estDate  = (s) => /^\d{4}(-\d{2}){0,2}$/.test(String(s));
+  const horodate = (s) => {
+    if (!estDate(s)) return 0;
+    const [a, m = 1, j = 1] = String(s).split('-').map(Number);
+    return Date.UTC(a, m - 1, j);
+  };
+  const formater = (s) => {
+    if (!estDate(s)) return String(s);
+    const n = String(s).split('-').length;
+    const options = n === 1 ? { year: 'numeric' }
+                  : n === 2 ? { month: 'long', year: 'numeric' }
+                  :           { day: 'numeric', month: 'long', year: 'numeric' };
+    return new Intl.DateTimeFormat('fr-FR', { ...options, timeZone: 'UTC' }).format(horodate(s));
+  };
+  const periode = (p) => {
+    if (!p.date) return '';
+    return p.fin ? `${formater(p.date)} – ${formater(p.fin)}` : formater(p.date);
+  };
+
+  /* ───────── Apparition au défilement ───────── */
+  const observateur = 'IntersectionObserver' in window
+    ? new IntersectionObserver((entrees) => {
+        entrees.forEach((e) => {
+          if (e.isIntersecting) { e.target.classList.add('vu'); observateur.unobserve(e.target); }
+        });
+      }, { rootMargin: '0px 0px -6% 0px' })
+    : null;
+
+  /* ───────── Construction de la frise ───────── */
+  function creer(p, i) {
+    const li = el('li', 'projet');
+
+    const date = el('time', 'date', p.date ? formater(p.date) : '');
+    if (estDate(p.date)) date.dateTime = p.date;
+
+    const bouton = el('button', 'carte');
+    bouton.type = 'button';
+
+    const vignette = el('span', 'vignette');
+    if (p.image) {
+      const img = new Image();
+      img.src = p.image;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      img.onerror = () => img.remove();
+      vignette.append(img);
+    }
+    bouton.append(vignette, el('span', 'titre', p.titre));
+    bouton.addEventListener('click', () => ouvrir(i));
+
+    li.append(date, bouton);
+    boutons[i] = bouton;
+    observateur ? observateur.observe(li) : li.classList.add('vu');
+    return li;
+  }
+
+  function afficher() {
+    const sens = RECENT_EN_PREMIER ? -1 : 1;
+    liste = projets
+      .filter((p) => p && p.titre)
+      .sort((a, b) => sens * (horodate(a.date) - horodate(b.date)));
+    boutons = [];
+
+    if (!liste.length) {
+      frise.replaceChildren(el('li', 'vide', 'Aucun projet trouvé dans le dossier « projects ».'));
+      return;
+    }
+    frise.replaceChildren(...liste.map(creer));
+  }
+
+  /* ───────── Aperçu détaillé ───────── */
+  function bloc(b) {
+    if (typeof b === 'string') return b ? el('p', null, b) : null;
+    if (!b || !b.image) return null;
+
+    const fig = el('figure', 'ap-figure');
+    const img = new Image();
+    img.src = b.image;
+    img.alt = b.legende || '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.onerror = () => fig.remove();
+    if (b.taille != null) {
+      img.style.width = typeof b.taille === 'number' ? `${b.taille}%` : b.taille;
+    }
+    fig.append(img);
+    if (b.legende) fig.append(el('figcaption', null, b.legende));
+    return fig;
+  }
+
+  function remplir(p) {
+    ap.titre.textContent = p.titre;
+    ap.meta.textContent  = [periode(p), p.contexte].filter(Boolean).join('  ·  ');
+    ap.meta.hidden       = !ap.meta.textContent;
+
+    const tags = p.tags || [];
+    ap.tags.replaceChildren(...tags.map((t) => el('li', null, t)));
+    ap.tags.hidden = !tags.length;
+
+    const paragraphes = Array.isArray(p.description)
+      ? p.description
+      : String(p.description || '').split(/\n\s*\n/);
+    ap.texte.replaceChildren(...paragraphes.map(bloc).filter(Boolean));
+
+    ap.visuel.hidden = !p.image;
+    if (p.image) { ap.image.src = p.image; ap.image.alt = p.titre; }
+  }
+
+  function ouvrir(i) {
+    courant = i;
+    remplir(liste[i]);
+    if (!apercu.open) {
+      apercu.showModal();
+      document.documentElement.classList.add('fige');
+    }
+    apercu.scrollTop = 0;
+    apercu.focus({ preventScroll: true });
+  }
+
+  ap.image.onerror = () => { ap.visuel.hidden = true; };
+  apercu.querySelector('.fermer').addEventListener('click', () => apercu.close());
+  apercu.addEventListener('click', (e) => { if (e.target === apercu) apercu.close(); });
+  apercu.addEventListener('close', () => {
+    document.documentElement.classList.remove('fige');
+    const b = boutons[courant];
+    if (b) { b.focus({ preventScroll: true }); b.scrollIntoView({ block: 'nearest' }); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!apercu.open) return;
+    if (e.key === 'ArrowRight' && courant < liste.length - 1) ouvrir(courant + 1);
+    if (e.key === 'ArrowLeft'  && courant > 0)                ouvrir(courant - 1);
+  });
+
+  /* ───────── Chargement séquentiel des fichiers projet ───────── */
+  function charger(n) {
+    if (n > NB_MAX_PROJETS) return afficher();
+    const avant  = projets.length;
+    const script = document.createElement('script');
+    script.src = `projects/projet-${String(n).padStart(2, '0')}.js`;
+    script.onload  = () => { script.remove(); projets.length > avant ? charger(n + 1) : afficher(); };
+    script.onerror = () => { script.remove(); afficher(); };
+    document.head.append(script);
+  }
+  charger(1);
+})();
+</script>
 </body>
 </html>
